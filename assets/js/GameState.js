@@ -341,6 +341,100 @@ class GameState {
     }
 
     /**
+  * Add a location to the current route
+  * @param {number} locationId - The ID of the location to add
+  * @returns {Object} Result with action, updated route info, and capacity status
+  */
+    addLocationToRoute(locationId) {
+        // Check if this is the depot
+        if (locationId === 0) {
+            // If current route is empty (just depot), do nothing
+            if (this.currentRoute.length <= 1) {
+                return {
+                    action: 'empty-route'
+                };
+            }
+
+            // Return to depot - complete the route
+            this.currentRoute.push(0);
+
+            // Check if all customers are served
+            const allServed = this.areAllCustomersServed();
+
+            if (allServed) {
+                // Calculate total distance for all routes
+                const totalDistance = this.calculateTotalDistance(this.routes);
+
+                // Check if this is the best solution
+                let newBest = false;
+                if (totalDistance < this.bestTotalDistance) {
+                    this.bestTotalDistance = totalDistance;
+                    this.bestRoutes = this.routes.map(route => [...route]);
+                    newBest = true;
+                }
+
+                return {
+                    action: 'complete-all-routes',
+                    totalDistance: totalDistance,
+                    routesCount: this.routes.length,
+                    newBest: newBest
+                };
+            } else {
+                // Start a new route
+                this.startNewRoute();
+
+                return {
+                    action: 'complete-route',
+                    routeIndex: this.currentRouteIndex - 1,
+                    routeDistance: this.calculateRouteDistance(this.routes[this.currentRouteIndex - 1]),
+                    newRouteIndex: this.currentRouteIndex
+                };
+            }
+        }
+
+        // It's a customer - find the customer object
+        const customer = this.customers.find(c => c.id === locationId);
+        if (!customer) return null;
+
+        // Check if customer is already served in any route
+        for (const route of this.routes) {
+            if (route.includes(locationId)) {
+                return {
+                    action: 'already-served'
+                };
+            }
+        }
+
+        // Check if current route is empty and start new route if needed
+        if (this.currentRoute.length <= 1 && this.currentRoute[0] === 0) {
+            // Current route is empty, we'll add the customer to it
+        } else {
+            // Check if adding this customer exceeds capacity
+            if (this.currentLoad + customer.demand > this.capacity) {
+                return {
+                    action: 'capacity-exceeded',
+                    currentLoad: this.currentLoad,
+                    demandValue: customer.demand,
+                    capacity: this.capacity
+                };
+            }
+        }
+
+        // Add customer to route and update load
+        this.currentRoute.push(locationId);
+        this.currentLoad += customer.demand;
+
+        return {
+            action: 'add-customer',
+            routeIndex: this.currentRouteIndex,
+            locationId: locationId,
+            currentLoad: this.currentLoad,
+            capacity: this.capacity,
+            percentFull: (this.currentLoad / this.capacity) * 100
+        };
+    }
+
+    /**
      * Check if a location was clicked and handle the interaction
      * @param {number} x - X coordinate of click
      * @param {number} y - Y coordinate of click
@@ -350,7 +444,39 @@ class GameState {
         // Find if a location was clicked - use a larger touch radius on mobile
         const hitRadius = this.isMobile ? this.touchRadius : this.locationSize + 5;
 
-        // Check the depot first
+        // Check if clicking on unserved customer and we need to create a new route
+        let clickedCustomerId = null;
+        let isCustomerServed = false;
+
+        // First, let's check if we're clicking on a customer
+        for (const customer of this.customers) {
+            const distance = this.calculateDistance(x, y, customer.x, customer.y);
+            if (distance < hitRadius) {
+                clickedCustomerId = customer.id;
+
+                // Check if this customer is already served
+                for (const route of this.routes) {
+                    if (route.includes(clickedCustomerId)) {
+                        isCustomerServed = true;
+                        break;
+                    }
+                }
+                break;
+            }
+        }
+
+        // If clicking on an unserved customer and we don't have an active route
+        if (clickedCustomerId !== null && !isCustomerServed &&
+            this.currentRoute.length === 1 &&
+            this.routes.length > 0 &&
+            this.routes[this.routes.length - 1].length > 1) {
+            // The last route is complete (has more than just depot)
+            // and current route is empty (just has depot)
+            // So we're starting a new route with this customer
+            return this.addLocationToRoute(clickedCustomerId);
+        }
+
+        // Check the depot
         const depotDist = this.calculateDistance(x, y, this.depot.x, this.depot.y);
         if (depotDist < hitRadius) {
             return this.addLocationToRoute(0);

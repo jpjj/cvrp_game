@@ -184,9 +184,9 @@ class EventHandlers {
     }
 
     /**
-     * Handle canvas click event
-     * @param {MouseEvent|Object} event - The click event or synthetic event from touch
-     */
+ * Handle canvas click event
+ * @param {MouseEvent|Object} event - The click event or synthetic event from touch
+ */
     handleCanvasClick(event) {
         if (!this.gameState.gameStarted) return;
 
@@ -247,6 +247,11 @@ class EventHandlers {
                 case 'already-served':
                     // Optionally show a message
                     // alert('This customer has already been served.');
+                    break;
+
+                case 'empty-route':
+                    // Do nothing when clicking depot with empty route
+                    // No need for alert or other feedback
                     break;
             }
 
