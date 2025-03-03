@@ -78,14 +78,16 @@ class Renderer {
     drawGame() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
+        // CHANGED ORDER: First draw all routes, then draw all locations on top
+
         // Draw all completed routes
         this.drawAllRoutes();
 
-        // Draw all locations
-        this.drawLocations();
-
         // Draw current route being built
         this.drawCurrentRoute();
+
+        // Draw all locations (depot and customers) on top of the routes
+        this.drawLocations();
     }
 
     /**
@@ -277,14 +279,16 @@ class Renderer {
     }
 
     /**
-     * Draw a specific algorithm solution
-     * @param {Array} routes - Array of route arrays
-     * @param {boolean} clearCanvas - Whether to clear the canvas first
-     */
+  * Draw a specific algorithm solution
+  * @param {Array} routes - Array of route arrays
+  * @param {boolean} clearCanvas - Whether to clear the canvas first
+  */
     drawAlgorithmSolution(routes, clearCanvas = true) {
         if (clearCanvas) {
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         }
+
+        // CHANGED ORDER: First draw routes, then locations on top
 
         // Draw each route with a unique color
         for (let i = 0; i < routes.length; i++) {
@@ -316,7 +320,7 @@ class Renderer {
             }
         }
 
-        // Draw all locations on top
+        // Draw all locations on top of the routes
         this.drawLocations();
     }
 
