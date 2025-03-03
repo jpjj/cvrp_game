@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description"
+        content="Interactive Capacitated Vehicle Routing Problem game - optimize delivery routes with limited vehicle capacity">
+    <meta name="theme-color" content="#4361ee">
+    <title>CVRP Game - Vehicle Routing Puzzle</title>
+    <link rel="stylesheet" href="assets/css/modern-style.css">
+    <link rel="stylesheet" href="assets/css/mobile-enhancements.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚚</text></svg>">
+    <style>
+        /* Landing page specific styles */
+        .landing-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+            text-align: center;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, rgba(67, 97, 238, 0.1) 0%, rgba(76, 201, 240, 0.1) 100%);
+            border-radius: var(--border-radius);
+            padding: 3rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--card-shadow);
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 2rem auto;
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .hero-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+            font-size: 1.1rem;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: 600;
+            transition: all var(--transition-speed);
+            box-shadow: 0 4px 6px rgba(67, 97, 238, 0.2);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 7px 10px rgba(67, 97, 238, 0.3);
+        }
+
+        .btn-secondary {
+            background-color: white;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            padding: 1rem 2rem;
+            border: 2px solid var(--primary-color);
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: 600;
+            transition: all var(--transition-speed);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--light-bg);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .feature-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: var(--card-shadow);
+            transition: all var(--transition-speed);
+            border-top: 4px solid var(--primary-color);
+            text-align: left;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-card h3 {
+            color: var(--primary-dark);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+
+        .demo-gif {
+            max-width: 100%;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            margin: 2rem 0;
+            border: 1px solid #e2e8f0;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Mobile adjustments */
+        @media (max-width: 768px) {
+            .hero {
+                padding: 2rem 1rem;
+            }
+
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .btn-primary,
+            .btn-secondary {
+                width: 100%;
+                margin-bottom: 0.5rem;
+                padding: 0.9rem 1rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .feature-card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="landing-container">
+        <div class="hero">
+            <h1>Vehicle Routing Game</h1>
+            <p>Challenge yourself with the Capacitated Vehicle Routing Problem (CVRP). Create efficient delivery routes
+                with limited vehicle capacity and minimize your total distance traveled!</p>
+
+            <div class="hero-buttons">
+                <a href="game.html" class="btn-primary">Play Game</a>
+                <a href="how-to-play.html" class="btn-secondary">How to Play</a>
+            </div>
+        </div>
+
+        <div class="features">
+            <div class="feature-card">
+                <div class="feature-icon">🚚</div>
+                <h3>Logistics Challenge</h3>
+                <p>Experience the real-world logistics problem that delivery companies solve every day: routing vehicles
+                    with limited capacity to serve all customers efficiently.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">⚖️</div>
+                <h3>Balance Tradeoffs</h3>
+                <p>Find the optimal balance between using fewer vehicles and keeping routes short, managing vehicle
+                    capacity against customer demands.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">📈</div>
+                <h3>Multiple Difficulties</h3>
+                <p>Choose from beginner to expert difficulty levels with different vehicle capacities and customer
+                    demands, or customize your own challenge.</p>
+            </div>
+        </div>
+
+        <p>The Capacitated Vehicle Routing Problem has applications in delivery services, waste collection, public
+            transportation planning, and many other logistics operations. Can you find the optimal solution?</p>
+
+        <footer>
+            <p>© 2025 CVRP Game | <a href="https://github.com/username/cvrp_game" target="_blank" rel="noopener">View on
+                    GitHub</a></p>
+        </footer>
+    </div>
+</body>
+
+</html>

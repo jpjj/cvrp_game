@@ -1,0 +1,283 @@
+/* Mobile-first enhancements for CVRP Game */
+
+/* Base mobile styles (small screens) */
+@media (max-width: 480px) {
+
+    /* Layout */
+    body {
+        padding: 1rem 0.75rem;
+    }
+
+    /* Typography */
+    h1 {
+        font-size: 1.75rem;
+        margin-bottom: 0.5rem;
+    }
+
+    h2 {
+        font-size: 1.2rem;
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Game container */
+    .game-container {
+        padding: 1rem;
+    }
+
+    /* Controls */
+    button {
+        padding: 0.8rem 1rem;
+        margin-bottom: 0.5rem;
+        min-width: 100%;
+        font-size: 1rem;
+    }
+
+    .control-group {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    #difficulty-select {
+        width: 100%;
+        padding: 0.8rem;
+        margin-bottom: 0.5rem;
+        font-size: 1rem;
+    }
+
+    /* Canvas */
+    canvas {
+        width: 100% !important;
+        height: auto !important;
+        touch-action: manipulation;
+        /* Prevents double-tap to zoom */
+    }
+
+    /* Stats and UI components */
+    .stats {
+        grid-template-columns: 1fr;
+        padding: 1rem;
+        font-size: 0.9rem;
+    }
+
+    /* Custom settings controls */
+    #custom-settings-container {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 1rem;
+    }
+
+    #custom-settings-container label {
+        margin-bottom: 0.5rem;
+        width: 100%;
+    }
+
+    #custom-capacity,
+    #custom-locations {
+        width: 100%;
+    }
+
+    /* Capacity display */
+    .capacity-container {
+        padding: 0.75rem;
+    }
+
+    .capacity-label {
+        font-size: 0.9rem;
+    }
+
+    /* Route information */
+    .route-info {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .route-card {
+        width: 100%;
+    }
+
+    /* Location information */
+    .location-info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    .depot-indicator {
+        margin-bottom: 0.5rem;
+    }
+
+    /* Slider styles */
+    .slider-container {
+        flex-direction: column;
+        align-items: flex-start;
+        margin: 15px 0;
+        padding: 0.75rem;
+    }
+
+    .slider-container label {
+        margin-right: 0;
+        margin-bottom: 0.5rem;
+        min-width: auto;
+        width: 100%;
+    }
+
+    input[type="range"] {
+        width: 100%;
+        margin: 0.5rem 0;
+    }
+
+    .value-display {
+        align-self: flex-end;
+    }
+}
+
+/* Medium-sized mobile devices */
+@media (min-width: 481px) and (max-width: 767px) {
+    body {
+        padding: 1.5rem 1rem;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    /* Two-column button layout */
+    .control-group {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5rem;
+        width: 100%;
+    }
+
+    button {
+        padding: 0.75rem 1rem;
+        min-width: auto;
+    }
+
+    #difficulty-select,
+    #new-game-btn {
+        grid-column: span 2;
+    }
+
+    /* Route info in two columns */
+    .route-info {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5rem;
+    }
+}
+
+/* All mobile devices (up to tablet) */
+@media (max-width: 767px) {
+
+    /* Touch optimizations */
+    .tooltip {
+        width: 2rem;
+        height: 2rem;
+    }
+
+    /* Typography and spacing */
+    .game-instructions li {
+        margin-bottom: 0.75rem;
+    }
+
+    footer {
+        margin-top: 2rem;
+        padding: 1rem 0;
+    }
+
+    /* Performance optimizations */
+    canvas {
+        image-rendering: optimizeSpeed;
+        image-rendering: -moz-crisp-edges;
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: optimize-contrast;
+    }
+
+    /* Disable hover effects */
+    .game-container:hover {
+        transform: none;
+        box-shadow: var(--card-shadow);
+    }
+
+    /* Loading indicator */
+    .loading-indicator {
+        font-size: 1rem;
+        padding: 1rem !important;
+        width: 80%;
+        text-align: center;
+    }
+
+    /* Tooltip styles */
+    .tooltip .tooltip-text {
+        width: 260px;
+        max-width: 85vw;
+        font-size: 0.9rem;
+        padding: 1rem;
+        left: 50%;
+        transform: translateX(-50%);
+        text-align: left;
+        line-height: 1.4;
+        word-wrap: break-word;
+    }
+
+    /* Modal adjustments */
+    .modal-overlay {
+        padding: 0 1rem;
+    }
+
+    .modal-content {
+        max-height: 85vh;
+    }
+
+    .modal-header {
+        padding: 1rem;
+    }
+
+    .modal-body {
+        padding: 1rem;
+    }
+
+    .modal-footer {
+        padding: 0.75rem 1rem;
+    }
+}
+
+/* Touch-friendly styles (all devices) */
+.location-hover {
+    cursor: pointer;
+}
+
+.tooltip:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* iOS form element fixes */
+input,
+select,
+button {
+    -webkit-appearance: none;
+    border-radius: var(--border-radius);
+}
+
+/* Loading animation */
+@keyframes pulse {
+    0% {
+        opacity: 0.5;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0.5;
+    }
+}
+
+.loading-indicator {
+    animation: pulse 1.5s infinite ease-in-out;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}

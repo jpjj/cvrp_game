@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Learn how to play the Capacitated Vehicle Routing Problem game">
+    <meta name="theme-color" content="#4361ee">
+    <title>How to Play - CVRP Game</title>
+    <link rel="stylesheet" href="assets/css/modern-style.css">
+    <link rel="stylesheet" href="assets/css/mobile-enhancements.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚚</text></svg>">
+    <style>
+        /* How to Play specific styles */
+        .how-to-play-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-button {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all var(--transition-speed);
+            flex-grow: 1;
+            text-align: center;
+            max-width: 200px;
+        }
+
+        .nav-button:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .instructions-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 2rem;
+            border-top: 4px solid var(--primary-color);
+        }
+
+        .instructions-card h2 {
+            color: var(--primary-dark);
+            margin-bottom: 1.5rem;
+        }
+
+        .step {
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .step:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .step h3 {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        .step-number {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 30px;
+            height: 30px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            margin-right: 1rem;
+            font-weight: 600;
+        }
+
+        .step img {
+            max-width: 100%;
+            border-radius: var(--border-radius);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin: 1rem 0;
+            border: 1px solid #e2e8f0;
+        }
+
+        .tip {
+            background-color: rgba(67, 97, 238, 0.1);
+            border-left: 4px solid var(--primary-color);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+        }
+
+        .tip-title {
+            font-weight: 600;
+            color: var(--primary-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .algorithm-box {
+            margin-top: 2rem;
+            background-color: var(--light-bg);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+        }
+
+        .algorithm-box h3 {
+            color: var(--primary-dark);
+            margin-bottom: 1rem;
+        }
+
+        .algorithm-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .algorithm-card {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .algorithm-card h4 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .algorithm-icon {
+            display: inline-block;
+            margin-right: 0.5rem;
+        }
+
+        .play-now-btn {
+            display: block;
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            text-align: center;
+            padding: 1rem 2rem;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            font-size: 1.2rem;
+            margin: 2rem auto;
+            max-width: 300px;
+            transition: all var(--transition-speed);
+            box-shadow: 0 4px 6px rgba(67, 97, 238, 0.2);
+        }
+
+        .play-now-btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 10px rgba(67, 97, 238, 0.3);
+        }
+
+        /* Mobile adjustments */
+        @media (max-width: 768px) {
+            .nav-buttons {
+                justify-content: center;
+            }
+
+            .nav-button {
+                flex-grow: 1;
+                max-width: none;
+            }
+
+            .step h3 {
+                font-size: 1.1rem;
+            }
+
+            .instructions-card {
+                padding: 1.5rem;
+            }
+
+            .algorithm-card {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="how-to-play-container">
+        <h1>How to Play</h1>
+
+        <div class="nav-buttons">
+            <a href="index.html" class="nav-button">Home</a>
+            <a href="game.html" class="nav-button">Play Game</a>
+        </div>
+
+        <div class="instructions-card">
+            <h2>Game Instructions</h2>
+
+            <div class="step">
+                <h3><span class="step-number">1</span> Understand the Challenge</h3>
+                <p>The Capacitated Vehicle Routing Problem (CVRP) is a logistics optimization problem: Find the most
+                    efficient routes for a fleet of vehicles with limited capacity to serve all customers and return to
+                    the depot.</p>
+                <p>This is an extension of the Traveling Salesperson Problem with additional constraints: each customer
+                    has a demand, and your vehicles have limited capacity. You'll need to balance:</p>
+                <ul>
+                    <li>Minimizing the total distance traveled</li>
+                    <li>Minimizing the number of vehicles used</li>
+                    <li>Ensuring no vehicle exceeds its capacity</li>
+                </ul>
+            </div>
+
+            <div class="step">
+                <h3><span class="step-number">2</span> Choose Your Difficulty</h3>
+                <p>Select a difficulty level from the dropdown menu:</p>
+                <ul>
+                    <li><strong>Beginner:</strong> Vehicle capacity of 25 - Good for learning</li>
+                    <li><strong>Medium:</strong> Vehicle capacity of 50 - Moderate challenge</li>
+                    <li><strong>Hard:</strong> Vehicle capacity of 100 - Difficult optimization</li>
+                    <li><strong>Expert:</strong> Vehicle capacity of 200 - Very challenging</li>
+                    <li><strong>Custom:</strong> Set your own capacity and number of customers</li>
+                </ul>
+                <p>Each customer's demand is randomly generated based on the vehicle capacity. Higher capacities mean
+                    more complex routes.</p>
+
+                <div class="tip">
+                    <div class="tip-title">Tip:</div>
+                    <p>For beginners, start with the "Beginner" level to learn the mechanics, then gradually increase
+                        the difficulty.</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <h3><span class="step-number">3</span> Understand the Map</h3>
+                <p>On the game board, you'll see:</p>
+                <ul>
+                    <li><strong>Depot:</strong> The purple square where all vehicles start and end their routes</li>
+                    <li><strong>Customers:</strong> Circles with numbers inside showing each customer's demand</li>
+                    <li><strong>Routes:</strong> Colored lines showing the paths your vehicles follow</li>
+                </ul>
+                <p>The capacity bar at the top shows how much cargo your current vehicle is carrying relative to its
+                    maximum capacity.</p>
+
+                <div class="tip">
+                    <div class="tip-title">Map Strategy:</div>
+                    <p>Try to group nearby customers with similar demands into the same route to minimize vehicle trips.
+                    </p>
+                </div>
+            </div>
+
+            <div class="step">
+                <h3><span class="step-number">4</span> Build Your Routes</h3>
+                <p>To create routes:</p>
+                <ol>
+                    <li>Each vehicle starts at the depot (purple square)</li>
+                    <li>Click on customers to add them to your current route</li>
+                    <li>Watch your vehicle's capacity - don't exceed the maximum!</li>
+                    <li>Return to the depot to complete the current route</li>
+                    <li>A new vehicle will automatically start from the depot</li>
+                    <li>Continue until all customers are served</li>
+                </ol>
+                <p>As you build routes, customers change color to show they've been visited, and the capacity bar
+                    updates.</p>
+
+                <div class="tip">
+                    <div class="tip-title">Capacity Management:</div>
+                    <p>If you're about to exceed capacity, you can either return to the depot to finish your route or
+                        use the "Undo" button to change your last selection.</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <h3><span class="step-number">5</span> Complete All Routes</h3>
+                <p>Your goal is to serve all customers using the fewest vehicles and shortest total distance.</p>
+                <p>After all customers are served, the game shows your performance compared to algorithmic solutions.
+                </p>
+                <p>Your score considers both total distance and number of vehicles used.</p>
+            </div>
+
+            <div class="step">
+                <h3><span class="step-number">6</span> Compare with Algorithms</h3>
+                <p>The game provides three algorithm solutions for comparison:</p>
+
+                <div class="algorithm-grid">
+                    <div class="algorithm-card">
+                        <h4><span class="algorithm-icon">💰</span> Clarke-Wright Savings</h4>
+                        <p>A classic CVRP algorithm that starts with individual routes and merges them based on
+                            "savings" when combined.</p>
+                    </div>
+
+                    <div class="algorithm-card">
+                        <h4><span class="algorithm-icon">🧭</span> Sweep Algorithm</h4>
+                        <p>A geometric approach that clusters customers by angle from the depot, then solves TSP for
+                            each cluster.</p>
+                    </div>
+
+                    <div class="algorithm-card">
+                        <h4><span class="algorithm-icon">🚀</span> Enhanced Solution</h4>
+                        <p>Uses multiple optimization techniques including local search and advanced route improvement
+                            for a high-quality solution.</p>
+                    </div>
+                </div>
+
+                <div class="tip">
+                    <div class="tip-title">Challenge:</div>
+                    <p>Try to beat the Sweep Algorithm first, then aim for the Clarke-Wright solution. Beating the
+                        Enhanced Solution is extremely difficult and often requires multiple attempts!</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <h3><span class="step-number">7</span> Game Controls</h3>
+                <p>Use these controls to aid your gameplay:</p>
+                <ul>
+                    <li><strong>Undo Last:</strong> Remove the last location from your current route</li>
+                    <li><strong>Reset Route:</strong> Clear your current vehicle's route</li>
+                    <li><strong>Finish Route:</strong> Return to depot and complete current route</li>
+                    <li><strong>Clear All Routes:</strong> Start over with all routes</li>
+                    <li><strong>Location Size:</strong> Adjust the size of locations for better visibility</li>
+                    <li><strong>Algorithm Buttons:</strong> View solutions from each algorithm</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="instructions-card">
+            <h2>Why CVRP Matters</h2>
+            <p>The Capacitated Vehicle Routing Problem has important real-world applications:</p>
+            <ul>
+                <li><strong>Last-Mile Delivery:</strong> Amazon, FedEx, and other delivery services use CVRP algorithms
+                    to optimize their delivery routes</li>
+                <li><strong>Waste Collection:</strong> Municipal waste management plans efficient garbage truck routes
+                </li>
+                <li><strong>Service Technicians:</strong> Scheduling service calls for technicians with limited time and
+                    tools</li>
+                <li><strong>Public Transportation:</strong> Planning bus routes with passenger capacity constraints</li>
+                <li><strong>Food Delivery:</strong> Optimizing multi-stop food deliveries while keeping food hot</li>
+                <li><strong>Humanitarian Logistics:</strong> Distributing aid supplies with limited vehicles</li>
+            </ul>
+            <p>By playing this game, you're experiencing the same challenges faced by logistics planners worldwide!</p>
+        </div>
+
+        <a href="game.html" class="play-now-btn">Play Now!</a>
+
+        <footer>
+            <p>© 2025 CVRP Game | <a href="https://github.com/username/cvrp_game" target="_blank" rel="noopener">View on
+                    GitHub</a></p>
+        </footer>
+    </div>
+</body>
+
+</html>
