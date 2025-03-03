@@ -60,8 +60,8 @@ class EventHandlers {
     }
 
     /**
-     * Set up all event listeners
-     */
+ * Set up all event listeners
+ */
     setupEventListeners() {
         // Canvas events - different handling for mobile vs desktop
         if (this.isMobile) {
@@ -86,17 +86,9 @@ class EventHandlers {
         this.dom.difficultySelect.addEventListener('change', this.handleDifficultyChange);
         this.dom.customCapacityInput.addEventListener('change', this.handleCustomSettingsChange);
         this.dom.customLocationsInput.addEventListener('change', this.handleCustomSettingsChange);
-        this.dom.locationSizeInput.addEventListener('input', this.handleLocationSizeChange);
 
         // Window events
         window.addEventListener('resize', this.handleWindowResize);
-
-        // On mobile, make location size larger by default for better touch targets
-        if (this.isMobile && this.gameState.locationSize < 12) {
-            this.gameState.updateLocationSize(12);
-            this.dom.locationSizeInput.value = 12;
-            this.dom.locationSizeValue.textContent = 12;
-        }
     }
 
     /**
@@ -122,7 +114,6 @@ class EventHandlers {
         this.dom.difficultySelect.removeEventListener('change', this.handleDifficultyChange);
         this.dom.customCapacityInput.removeEventListener('change', this.handleCustomSettingsChange);
         this.dom.customLocationsInput.removeEventListener('change', this.handleCustomSettingsChange);
-        this.dom.locationSizeInput.removeEventListener('input', this.handleLocationSizeChange);
         window.removeEventListener('resize', this.handleWindowResize);
     }
 
@@ -227,8 +218,9 @@ class EventHandlers {
                     this.updateTotalDistance();
                     this.updateRoutesList();
 
-                    // Update vehicle count
-                    this.dom.vehiclesUsed.textContent = this.gameState.routes.length - 1; // -1 because last route is empty
+                    // Update vehicle count - count only routes with at least one customer
+                    const vehiclesUsed = this.gameState.routes.filter(route => route.length > 2).length;
+                    this.dom.vehiclesUsed.textContent = vehiclesUsed;
 
                     // Update best solution if new
                     if (result.newBest) {
@@ -238,7 +230,6 @@ class EventHandlers {
                     // Show completion modal
                     this.showCompletionModal(result);
                     break;
-
                 case 'capacity-exceeded':
                     // Show alert for exceeded capacity
                     alert(`Cannot add this customer with demand ${result.demandValue}. Current load: ${result.currentLoad}/${result.capacity}. Return to depot to start a new vehicle.`);
@@ -261,9 +252,9 @@ class EventHandlers {
     }
 
     /**
-     * Show completion modal with results
-     * @param {Object} result - The completion result
-     */
+ * Show completion modal with results
+ * @param {Object} result - The completion result
+ */
     showCompletionModal(result) {
         // First ensure all algorithm solutions are calculated
         if (this.gameState.savingsRoutes.length === 0) {
@@ -278,7 +269,10 @@ class EventHandlers {
 
         // Get the distances and vehicle counts
         const userDistance = result.totalDistance;
-        const userVehicles = this.gameState.routes.length - 1; // -1 because last route is empty
+
+        // FIX: Count actual non-empty routes (with at least one customer)
+        // A valid route must have at least 3 elements: depot → customer → depot
+        const userVehicles = this.gameState.routes.filter(route => route.length > 2).length;
 
         const savingsDistance = this.gameState.calculateTotalDistance(this.gameState.savingsRoutes);
         const savingsVehicles = this.gameState.savingsRoutes.length;
@@ -353,11 +347,15 @@ class EventHandlers {
     }
 
     /**
-     * Update the routes list in the UI
-     */
+ * Update the routes list in the UI
+ */
     updateRoutesList() {
         // Clear current route cards
         this.dom.routeInfo.innerHTML = '';
+
+        // Count non-empty routes (for vehicle count display)
+        const vehiclesUsed = this.gameState.routes.filter(route => route.length > 2).length;
+        this.dom.vehiclesUsed.textContent = vehiclesUsed;
 
         // Add a card for each non-empty route
         for (let i = 0; i < this.gameState.routes.length; i++) {
@@ -452,7 +450,10 @@ class EventHandlers {
 
             // Update vehicle number and count
             this.dom.vehicleNumber.textContent = this.gameState.currentRouteIndex + 1;
-            this.dom.vehiclesUsed.textContent = this.gameState.currentRouteIndex;
+
+            // Count non-empty routes
+            const vehiclesUsed = this.gameState.routes.filter(route => route.length > 2).length;
+            this.dom.vehiclesUsed.textContent = vehiclesUsed;
 
             // Disable finish button until we add customers
             this.dom.finishRouteButton.disabled = true;
@@ -490,8 +491,8 @@ class EventHandlers {
     }
 
     /**
-     * Handle savings algorithm button click
-     */
+ * Handle savings algorithm button click
+ */
     handleSavingsClick() {
         // Show calculating indicator
         const originalText = this.dom.savingsButton.textContent;
@@ -510,7 +511,10 @@ class EventHandlers {
             this.dom.savingsDistance.textContent = result.totalDistance.toFixed(2);
             this.dom.savingsVehicles.textContent = result.routesCount;
             this.dom.vehicleNumber.textContent = this.gameState.currentRouteIndex + 1;
-            this.dom.vehiclesUsed.textContent = this.gameState.routes.length - 1;
+
+            // Count non-empty routes for vehicle count
+            const vehiclesUsed = this.gameState.routes.filter(route => route.length > 2).length;
+            this.dom.vehiclesUsed.textContent = vehiclesUsed;
 
             // Reset capacity for new route
             this.updateCapacityDisplay(0, this.gameState.capacity, 0);
@@ -533,9 +537,10 @@ class EventHandlers {
         }, 50);
     }
 
+
     /**
-     * Handle sweep algorithm button click
-     */
+ * Handle sweep algorithm button click
+ */
     handleSweepClick() {
         // Show calculating indicator
         const originalText = this.dom.sweepButton.textContent;
@@ -554,7 +559,10 @@ class EventHandlers {
             this.dom.sweepDistance.textContent = result.totalDistance.toFixed(2);
             this.dom.sweepVehicles.textContent = result.routesCount;
             this.dom.vehicleNumber.textContent = this.gameState.currentRouteIndex + 1;
-            this.dom.vehiclesUsed.textContent = this.gameState.routes.length - 1;
+
+            // Count non-empty routes for vehicle count
+            const vehiclesUsed = this.gameState.routes.filter(route => route.length > 2).length;
+            this.dom.vehiclesUsed.textContent = vehiclesUsed;
 
             // Reset capacity for new route
             this.updateCapacityDisplay(0, this.gameState.capacity, 0);
@@ -578,8 +586,8 @@ class EventHandlers {
     }
 
     /**
-     * Handle enhanced algorithm button click
-     */
+ * Handle enhanced algorithm button click
+ */
     handleEnhancedClick() {
         // Show calculating indicator
         const originalText = this.dom.enhancedButton.textContent;
@@ -598,7 +606,10 @@ class EventHandlers {
             this.dom.enhancedDistance.textContent = result.totalDistance.toFixed(2);
             this.dom.enhancedVehicles.textContent = result.routesCount;
             this.dom.vehicleNumber.textContent = this.gameState.currentRouteIndex + 1;
-            this.dom.vehiclesUsed.textContent = this.gameState.routes.length - 1;
+
+            // Count non-empty routes for vehicle count
+            const vehiclesUsed = this.gameState.routes.filter(route => route.length > 2).length;
+            this.dom.vehiclesUsed.textContent = vehiclesUsed;
 
             // Reset capacity for new route
             this.updateCapacityDisplay(0, this.gameState.capacity, 0);
@@ -620,7 +631,6 @@ class EventHandlers {
             this.renderer.drawGame();
         }, 50);
     }
-
     /**
      * Handle new game button click
      */

@@ -14,7 +14,9 @@ class Renderer {
         this.ctx = canvas.getContext('2d');
         this.gameState = gameState;
         this.canvasRatio = 0.6; // Height to width ratio
-        this.touchRadius = 30; // Larger radius for touch detection
+
+        // Use a consistent touch radius based on fixed location size
+        this.touchRadius = Math.max(gameState.locationSize * 2, 30);
         this.isMobile = this.detectMobile();
 
         // For touch devices, handle both touch and click events
@@ -33,10 +35,10 @@ class Renderer {
     }
 
     /**
-     * Set up improved touch handling for mobile devices
-     */
+ * Set up improved touch handling for mobile devices
+ */
     setupTouchHandling() {
-        // Already set up in EventHandlers, but we can enhance the renderer for touch
+        // Always use a fixed touch radius based on the constant location size
         this.touchRadius = Math.max(this.gameState.locationSize * 2, 30);
     }
 
@@ -59,11 +61,7 @@ class Renderer {
         // Maintain aspect ratio
         this.canvas.height = containerWidth * this.canvasRatio;
 
-        // If we're on mobile, ensure locations are scaled appropriately
-        if (this.isMobile && this.gameState.gameStarted) {
-            // Ensure location size is appropriate for mobile view
-            this.gameState.updateLocationSize(Math.max(10, this.gameState.locationSize));
-        }
+        // No need to adjust location size as it's now fixed
 
         // When resizing, redraw the game
         if (this.gameState.gameStarted) {

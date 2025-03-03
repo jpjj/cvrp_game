@@ -8,8 +8,8 @@
  */
 class GameState {
     /**
-     * Initialize the game state
-     */
+ * Initialize the game state
+ */
     constructor() {
         // Locations (customers + depot)
         this.depot = { x: 0, y: 0, id: 0 }; // Depot is always ID 0
@@ -32,7 +32,7 @@ class GameState {
         this.currentLoad = 0; // Current vehicle load
 
         // Visualization
-        this.locationSize = 10; // Size of locations on canvas
+        this.locationSize = 15; // Set to maximum size (15 instead of default 10)
         this.touchRadius = 30; // Larger click/touch detection radius for mobile
         this.isMobile = this.detectMobile();
         this.gameStarted = false;
@@ -55,10 +55,8 @@ class GameState {
         // Vehicle cost - used in scoring
         this.vehicleCost = 100; // Base cost per vehicle used
 
-        // Adjust location size for mobile
-        if (this.isMobile) {
-            this.locationSize = Math.max(12, this.locationSize);
-        }
+        // No need to adjust location size for mobile as we're using max size for all
+        // (Original conditional adjustment removed)
     }
 
     /**

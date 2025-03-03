@@ -52,9 +52,8 @@ export function getDomElements() {
         difficultySelect: document.getElementById('difficulty-select'),
         customSettingsContainer: document.getElementById('custom-settings-container'),
         customCapacityInput: document.getElementById('custom-capacity'),
-        customLocationsInput: document.getElementById('custom-locations'),
-        locationSizeInput: document.getElementById('location-size'),
-        locationSizeValue: document.getElementById('location-size-value')
+        customLocationsInput: document.getElementById('custom-locations')
+        // Removed location size elements
     };
 }
 
