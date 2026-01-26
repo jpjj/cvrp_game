@@ -318,10 +318,7 @@ input[type="range"]:focus {
 
 /* Location information */
 .location-info {
-    display: flex;
-    align-items: center;
-    margin-bottom: 1rem;
-    font-weight: 500;
+    display: none !important;
 }
 
 /* Stats display */
