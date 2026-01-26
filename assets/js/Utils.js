@@ -41,7 +41,6 @@ export function getDomElements() {
         // Control buttons
         undoButton: document.getElementById('undo-btn'),
         resetRouteButton: document.getElementById('reset-route-btn'),
-        finishRouteButton: document.getElementById('finish-route-btn'),
         clearAllButton: document.getElementById('clear-all-btn'),
         savingsButton: document.getElementById('savings-btn'),
         sweepButton: document.getElementById('sweep-btn'),

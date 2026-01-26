@@ -67,7 +67,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Disable buttons
         domElements.undoButton.disabled = true;
-        domElements.finishRouteButton.disabled = true;
 
         // Precalculate solutions in the background for better initial loading
         setTimeout(() => {

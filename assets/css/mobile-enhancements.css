@@ -75,6 +75,21 @@
         width: 100%;
     }
 
+    /* Route control buttons in a row */
+    .control-group.route-controls {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap;
+        gap: 0.5rem;
+    }
+
+    .control-group.route-controls button {
+        flex: 1;
+        min-width: 0;
+        padding: 0.6rem 0.4rem;
+        font-size: 0.8rem;
+    }
+
     #difficulty-select {
         width: 100%;
         padding: 0.7rem;
@@ -229,6 +244,18 @@
         grid-template-columns: 1fr 1fr;
         gap: 0.5rem;
         width: 100%;
+    }
+
+    /* Route control buttons in a row */
+    .control-group.route-controls {
+        display: flex !important;
+        flex-direction: row !important;
+        grid-template-columns: none;
+    }
+
+    .control-group.route-controls button {
+        flex: 1;
+        min-width: 0;
     }
 
     button {

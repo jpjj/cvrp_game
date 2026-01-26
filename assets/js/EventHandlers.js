@@ -38,7 +38,6 @@ class EventHandlers {
         this.handleCanvasTouchEnd = this.handleCanvasTouchEnd.bind(this);
         this.handleUndoClick = this.handleUndoClick.bind(this);
         this.handleResetRouteClick = this.handleResetRouteClick.bind(this);
-        this.handleFinishRouteClick = this.handleFinishRouteClick.bind(this);
         this.handleClearAllClick = this.handleClearAllClick.bind(this);
         this.handleSavingsClick = this.handleSavingsClick.bind(this);
         this.handleSweepClick = this.handleSweepClick.bind(this);
@@ -75,7 +74,6 @@ class EventHandlers {
         // Button events
         this.dom.undoButton.addEventListener('click', this.handleUndoClick);
         this.dom.resetRouteButton.addEventListener('click', this.handleResetRouteClick);
-        this.dom.finishRouteButton.addEventListener('click', this.handleFinishRouteClick);
         this.dom.clearAllButton.addEventListener('click', this.handleClearAllClick);
         this.dom.savingsButton.addEventListener('click', this.handleSavingsClick);
         this.dom.sweepButton.addEventListener('click', this.handleSweepClick);
@@ -105,7 +103,6 @@ class EventHandlers {
 
         this.dom.undoButton.removeEventListener('click', this.handleUndoClick);
         this.dom.resetRouteButton.removeEventListener('click', this.handleResetRouteClick);
-        this.dom.finishRouteButton.removeEventListener('click', this.handleFinishRouteClick);
         this.dom.clearAllButton.removeEventListener('click', this.handleClearAllClick);
         this.dom.savingsButton.removeEventListener('click', this.handleSavingsClick);
         this.dom.sweepButton.removeEventListener('click', this.handleSweepClick);
@@ -191,9 +188,8 @@ class EventHandlers {
                     this.updateCustomersServedCount();
                     this.updateCapacityDisplay(result.currentLoad, result.capacity, result.percentFull);
 
-                    // Enable buttons
+                    // Enable undo button
                     this.dom.undoButton.disabled = false;
-                    this.dom.finishRouteButton.disabled = false;
                     break;
 
                 case 'complete-route':
@@ -207,9 +203,6 @@ class EventHandlers {
 
                     // Update vehicle number
                     this.dom.vehicleNumber.textContent = this.gameState.currentRouteIndex + 1;
-
-                    // Disable finish button until we add customers
-                    this.dom.finishRouteButton.disabled = true;
                     break;
 
                 case 'complete-all-routes':
@@ -406,9 +399,6 @@ class EventHandlers {
 
             // Disable undo button if route is empty
             this.dom.undoButton.disabled = result.isEmpty;
-
-            // Disable finish button if route is empty
-            this.dom.finishRouteButton.disabled = result.isEmpty;
         }
 
         this.renderer.drawGame();
@@ -426,43 +416,8 @@ class EventHandlers {
         // Update customers count
         this.updateCustomersServedCount();
 
-        // Disable buttons
+        // Disable undo button
         this.dom.undoButton.disabled = true;
-        this.dom.finishRouteButton.disabled = true;
-
-        this.renderer.drawGame();
-    }
-
-    /**
-     * Handle finish route button click
-     */
-    handleFinishRouteClick() {
-        const result = this.gameState.completeCurrentRoute();
-
-        if (result.action === 'complete-route') {
-            // Update route info
-            this.updateCustomersServedCount();
-            this.updateTotalDistance();
-            this.updateRoutesList();
-
-            // Reset capacity display for new route
-            this.updateCapacityDisplay(0, this.gameState.capacity, 0);
-
-            // Update vehicle number and count
-            this.dom.vehicleNumber.textContent = this.gameState.currentRouteIndex + 1;
-
-            // Count non-empty routes
-            const vehiclesUsed = this.gameState.routes.filter(route => route.length > 2).length;
-            this.dom.vehiclesUsed.textContent = vehiclesUsed;
-
-            // Disable finish button until we add customers
-            this.dom.finishRouteButton.disabled = true;
-
-            // Disable undo button for empty route
-            this.dom.undoButton.disabled = true;
-        } else if (result.action === 'no-customers') {
-            alert('Add at least one customer to the route before finishing.');
-        }
 
         this.renderer.drawGame();
     }
@@ -482,9 +437,8 @@ class EventHandlers {
             this.dom.vehicleNumber.textContent = 1;
             this.dom.vehiclesUsed.textContent = 0;
 
-            // Disable buttons
+            // Disable undo button
             this.dom.undoButton.disabled = true;
-            this.dom.finishRouteButton.disabled = true;
 
             this.renderer.drawGame();
         }
@@ -528,9 +482,8 @@ class EventHandlers {
             this.dom.savingsButton.textContent = originalText;
             this.dom.savingsButton.disabled = false;
 
-            // Disable route editing buttons
+            // Disable undo button
             this.dom.undoButton.disabled = true;
-            this.dom.finishRouteButton.disabled = true;
 
             // Draw the solution
             this.renderer.drawGame();
@@ -576,9 +529,8 @@ class EventHandlers {
             this.dom.sweepButton.textContent = originalText;
             this.dom.sweepButton.disabled = false;
 
-            // Disable route editing buttons
+            // Disable undo button
             this.dom.undoButton.disabled = true;
-            this.dom.finishRouteButton.disabled = true;
 
             // Draw the solution
             this.renderer.drawGame();
@@ -623,9 +575,8 @@ class EventHandlers {
             this.dom.enhancedButton.textContent = originalText;
             this.dom.enhancedButton.disabled = false;
 
-            // Disable route editing buttons
+            // Disable undo button
             this.dom.undoButton.disabled = true;
-            this.dom.finishRouteButton.disabled = true;
 
             // Draw the solution
             this.renderer.drawGame();
@@ -693,9 +644,8 @@ class EventHandlers {
                     this.dom.bestDistance.textContent = "N/A";
                 }
 
-                // Disable buttons
+                // Disable undo button
                 this.dom.undoButton.disabled = true;
-                this.dom.finishRouteButton.disabled = true;
 
                 // Calculate algorithm solutions in the background
                 this.calculateSolutionsAsync();
