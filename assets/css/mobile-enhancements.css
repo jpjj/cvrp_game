@@ -5,12 +5,12 @@
 
     /* Layout */
     body {
-        padding: 1rem 0.75rem;
+        padding: 0.5rem 0.5rem;
     }
 
     /* Typography */
     h1 {
-        font-size: 1.75rem;
+        font-size: 1.5rem;
         margin-bottom: 0.5rem;
     }
 
@@ -20,17 +20,54 @@
         margin-bottom: 1.5rem;
     }
 
-    /* Game container */
-    .game-container {
-        padding: 1rem;
+    /* Hide navigation buttons on mobile */
+    .nav-buttons {
+        display: none !important;
     }
 
-    /* Controls */
+    /* Hide depot and customers legend on mobile */
+    .location-info {
+        display: none !important;
+    }
+
+    /* Game container */
+    .game-container {
+        padding: 0.75rem;
+    }
+
+    /* Top control group: difficulty + new game side by side */
+    .control-group:first-child {
+        display: flex;
+        flex-direction: row !important;
+        flex-wrap: nowrap;
+        gap: 0.5rem;
+        align-items: stretch;
+        margin-bottom: 0.5rem;
+    }
+
+    .control-group:first-child > label {
+        display: none;
+    }
+
+    .control-group:first-child #difficulty-select {
+        flex: 1;
+        min-width: 0;
+        margin-bottom: 0;
+    }
+
+    .control-group:first-child #new-game-btn {
+        flex: 0 0 auto;
+        min-width: auto;
+        white-space: nowrap;
+        margin-bottom: 0;
+    }
+
+    /* Other controls */
     button {
-        padding: 0.8rem 1rem;
+        padding: 0.7rem 0.8rem;
         margin-bottom: 0.5rem;
         min-width: 100%;
-        font-size: 1rem;
+        font-size: 0.9rem;
     }
 
     .control-group {
@@ -40,31 +77,32 @@
 
     #difficulty-select {
         width: 100%;
-        padding: 0.8rem;
+        padding: 0.7rem;
         margin-bottom: 0.5rem;
-        font-size: 1rem;
+        font-size: 0.9rem;
     }
 
-    /* Canvas */
+    /* Canvas - taller for more playing field */
     canvas {
         width: 100% !important;
         height: auto !important;
+        min-height: 70vh !important;
         touch-action: manipulation;
-        /* Prevents double-tap to zoom */
+        margin: 0.5rem auto;
     }
 
     /* Stats and UI components */
     .stats {
         grid-template-columns: 1fr;
-        padding: 1rem;
-        font-size: 0.9rem;
+        padding: 0.75rem;
+        font-size: 0.85rem;
     }
 
     /* Custom settings controls */
     #custom-settings-container {
         flex-direction: column;
         align-items: flex-start;
-        padding: 1rem;
+        padding: 0.75rem;
     }
 
     #custom-settings-container label {
@@ -77,13 +115,14 @@
         width: 100%;
     }
 
-    /* Capacity display */
+    /* Capacity display - more compact */
     .capacity-container {
-        padding: 0.75rem;
+        padding: 0.5rem;
+        margin: 0.5rem 0;
     }
 
     .capacity-label {
-        font-size: 0.9rem;
+        font-size: 0.85rem;
     }
 
     /* Route information */
@@ -94,17 +133,6 @@
 
     .route-card {
         width: 100%;
-    }
-
-    /* Location information */
-    .location-info {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.5rem;
-    }
-
-    .depot-indicator {
-        margin-bottom: 0.5rem;
     }
 
     /* Slider styles */
@@ -130,19 +158,72 @@
     .value-display {
         align-self: flex-end;
     }
+
+    /* Hide game instructions on mobile to save space */
+    .game-instructions {
+        display: none;
+    }
 }
 
 /* Medium-sized mobile devices */
 @media (min-width: 481px) and (max-width: 767px) {
     body {
-        padding: 1.5rem 1rem;
+        padding: 1rem 0.75rem;
     }
 
     h1 {
-        font-size: 2rem;
+        font-size: 1.75rem;
+        margin-bottom: 0.5rem;
     }
 
-    /* Two-column button layout */
+    /* Hide navigation buttons on medium mobile too */
+    .nav-buttons {
+        display: none !important;
+    }
+
+    /* Hide depot and customers legend */
+    .location-info {
+        display: none !important;
+    }
+
+    /* Hide game instructions */
+    .game-instructions {
+        display: none;
+    }
+
+    /* Game container */
+    .game-container {
+        padding: 1rem;
+    }
+
+    /* Top control group: difficulty + new game side by side */
+    .control-group:first-child {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap;
+        gap: 0.5rem;
+        align-items: stretch;
+        margin-bottom: 0.5rem;
+    }
+
+    .control-group:first-child > label {
+        display: none;
+    }
+
+    .control-group:first-child #difficulty-select {
+        flex: 1;
+        min-width: 0;
+        margin-bottom: 0;
+    }
+
+    .control-group:first-child #new-game-btn {
+        flex: 0 0 auto;
+        min-width: auto;
+        white-space: nowrap;
+        margin-bottom: 0;
+    }
+
+    /* Two-column button layout for other controls */
     .control-group {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -153,11 +234,6 @@
     button {
         padding: 0.75rem 1rem;
         min-width: auto;
-    }
-
-    #difficulty-select,
-    #new-game-btn {
-        grid-column: span 2;
     }
 
     /* Route info in two columns */

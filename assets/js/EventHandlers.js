@@ -317,15 +317,15 @@ class EventHandlers {
         this.dom.maxCapacity.textContent = capacity;
         this.dom.capacityFill.style.width = `${percentFull}%`;
 
-        // Change color as it gets fuller
+        // Change color as it gets fuller (farm/apple theme)
         if (percentFull > 90) {
-            this.dom.capacityFill.style.background = 'linear-gradient(to right, #f72585, #b5179e)';
+            this.dom.capacityFill.style.background = 'linear-gradient(to right, #c41e3a, #8b0000)';
         } else if (percentFull > 75) {
-            this.dom.capacityFill.style.background = 'linear-gradient(to right, #f8961e, #f72585)';
+            this.dom.capacityFill.style.background = 'linear-gradient(to right, #d2691e, #c41e3a)';
         } else if (percentFull > 50) {
-            this.dom.capacityFill.style.background = 'linear-gradient(to right, #90be6d, #f8961e)';
+            this.dom.capacityFill.style.background = 'linear-gradient(to right, #6b8e23, #d2691e)';
         } else {
-            this.dom.capacityFill.style.background = 'linear-gradient(to right, #4cc9f0, #4361ee)';
+            this.dom.capacityFill.style.background = 'linear-gradient(to right, #8fbc8f, #2d5016)';
         }
     }
 

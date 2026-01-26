@@ -4,26 +4,26 @@
  */
 
 :root {
-    --primary-color: #4361ee;
-    --primary-light: #4895ef;
-    --primary-dark: #3a0ca3;
-    --success-color: #4cc9f0;
-    --warning-color: #f72585;
-    --light-bg: #f8f9fa;
-    --dark-bg: #212529;
-    --text-color: #343a40;
-    --text-light: #6c757d;
+    --primary-color: #2d5016;
+    --primary-light: #4a7c23;
+    --primary-dark: #1a3009;
+    --success-color: #6b8e23;
+    --warning-color: #c41e3a;
+    --light-bg: #faf8f5;
+    --dark-bg: #2c2416;
+    --text-color: #3d3225;
+    --text-light: #6b5d4d;
     --card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
     --transition-speed: 0.3s;
     --border-radius: 8px;
     --font-main: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 
-    /* CVRP specific colors */
-    --depot-color: #7209b7;
-    --unserved-color: #e74c3c;
-    --served-color: #3498db;
-    --current-route-color: #27ae60;
-    --route-colors: #3498db, #e67e22, #9b59b6, #27ae60, #f1c40f, #e74c3c, #1abc9c, #34495e, #d35400, #8e44ad;
+    /* CVRP specific colors - Farm/Apple theme */
+    --depot-color: #8b4513;
+    --unserved-color: #c41e3a;
+    --served-color: #6b8e23;
+    --current-route-color: #228b22;
+    --route-colors: #c41e3a, #e67e22, #6b8e23, #228b22, #8b4513, #cd853f, #556b2f, #a0522d, #d2691e, #8fbc8f;
 }
 
 /* Base styles */

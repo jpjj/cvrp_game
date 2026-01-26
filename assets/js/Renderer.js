@@ -13,11 +13,13 @@ class Renderer {
         this.canvas = canvas;
         this.ctx = canvas.getContext('2d');
         this.gameState = gameState;
-        this.canvasRatio = 0.6; // Height to width ratio
 
         // Use a consistent touch radius based on fixed location size
         this.touchRadius = Math.max(gameState.locationSize * 2, 30);
         this.isMobile = this.detectMobile();
+
+        // Height to width ratio - taller on mobile for more playing field
+        this.canvasRatio = this.isMobile ? 1.4 : 0.6;
 
         // Load background image
         this.backgroundImage = new Image();
@@ -59,6 +61,10 @@ class Renderer {
     resizeCanvas() {
         const container = document.querySelector('.game-container');
         if (!container) return;
+
+        // Re-detect mobile status (for orientation changes)
+        this.isMobile = this.detectMobile();
+        this.canvasRatio = this.isMobile ? 1.4 : 0.6;
 
         // Get container width accounting for padding
         const containerStyle = window.getComputedStyle(container);
