@@ -36,6 +36,7 @@ class EventHandlers {
         this.handleCanvasTouchStart = this.handleCanvasTouchStart.bind(this);
         this.handleCanvasTouchMove = this.handleCanvasTouchMove.bind(this);
         this.handleCanvasTouchEnd = this.handleCanvasTouchEnd.bind(this);
+        this.handlePhaserClick = this.handlePhaserClick.bind(this);
         this.handleUndoClick = this.handleUndoClick.bind(this);
         this.handleResetRouteClick = this.handleResetRouteClick.bind(this);
         this.handleClearAllClick = this.handleClearAllClick.bind(this);
@@ -62,7 +63,10 @@ class EventHandlers {
  * Set up all event listeners
  */
     setupEventListeners() {
-        // Canvas events - different handling for mobile vs desktop
+        // Listen for Phaser click events (works for both desktop and mobile)
+        document.addEventListener('phaserClick', this.handlePhaserClick);
+
+        // Also keep legacy canvas events as fallback
         if (this.isMobile) {
             this.dom.canvas.addEventListener('touchstart', this.handleCanvasTouchStart, { passive: false });
             this.dom.canvas.addEventListener('touchmove', this.handleCanvasTouchMove, { passive: true });
@@ -93,6 +97,9 @@ class EventHandlers {
      * Remove all event listeners
      */
     removeEventListeners() {
+        // Remove Phaser click listener
+        document.removeEventListener('phaserClick', this.handlePhaserClick);
+
         if (this.isMobile) {
             this.dom.canvas.removeEventListener('touchstart', this.handleCanvasTouchStart);
             this.dom.canvas.removeEventListener('touchmove', this.handleCanvasTouchMove);
@@ -172,6 +179,17 @@ class EventHandlers {
     }
 
     /**
+     * Handle Phaser click event (custom event from PhaserRenderer)
+     * @param {CustomEvent} event - The custom phaserClick event
+     */
+    handlePhaserClick(event) {
+        if (!this.gameState.gameStarted) return;
+
+        const coords = this.renderer.getCanvasCoordinates(event);
+        this.processLocationClick(coords.x, coords.y);
+    }
+
+    /**
  * Handle canvas click event
  * @param {MouseEvent|Object} event - The click event or synthetic event from touch
  */
@@ -179,7 +197,16 @@ class EventHandlers {
         if (!this.gameState.gameStarted) return;
 
         const coords = this.renderer.getCanvasCoordinates(event);
-        const result = this.gameState.handleLocationClick(coords.x, coords.y);
+        this.processLocationClick(coords.x, coords.y);
+    }
+
+    /**
+     * Process a location click at the given coordinates
+     * @param {number} x - X coordinate
+     * @param {number} y - Y coordinate
+     */
+    processLocationClick(x, y) {
+        const result = this.gameState.handleLocationClick(x, y);
 
         if (result) {
             switch (result.action) {

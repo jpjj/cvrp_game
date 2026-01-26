@@ -46,10 +46,11 @@ class GameState {
             custom: 50
         };
 
-        // Route colors (farm/apple theme - earth tones, greens, and reds)
+        // Route colors (high contrast against green checkerboard background)
+        // Avoiding greens - using reds, oranges, browns, purples, blues
         this.routeColors = [
-            '#c41e3a', '#e67e22', '#6b8e23', '#228b22', '#8b4513',
-            '#cd853f', '#556b2f', '#a0522d', '#d2691e', '#8fbc8f'
+            '#c41e3a', '#e67e22', '#8b4513', '#9b59b6', '#e74c3c',
+            '#cd853f', '#3498db', '#a0522d', '#d2691e', '#c0392b'
         ];
 
         // Vehicle cost - used in scoring

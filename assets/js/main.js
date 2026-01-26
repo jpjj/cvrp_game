@@ -7,7 +7,7 @@
  */
 
 import GameState from './GameState.js';
-import Renderer from './Renderer.js';
+import PhaserRenderer from './PhaserRenderer.js';
 import CvrpAlgorithms from './Algorithms.js';
 import EventHandlers from './EventHandlers.js';
 import { getDomElements } from './Utils.js';
@@ -22,8 +22,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Create game state
     const gameState = new GameState();
 
-    // Create renderer
-    const renderer = new Renderer(domElements.canvas, gameState);
+    // Create renderer (Phaser 3 based)
+    const renderer = new PhaserRenderer(domElements.canvas, gameState);
 
     // IMPORTANT: Ensure canvas is properly sized before drawing anything
     // This fixes mobile display issues
@@ -43,15 +43,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const customCapacity = parseInt(domElements.customCapacityInput.value || 50);
     const customLocations = parseInt(domElements.customLocationsInput.value || 15);
 
-    // Wait for the canvas to be fully sized before generating locations
-    setTimeout(() => {
+    // Function to initialize the game once Phaser is ready
+    const initializeGame = () => {
+        // Get canvas dimensions from Phaser game
+        const width = renderer.game ? renderer.game.canvas.width : domElements.canvas.width;
+        const height = renderer.game ? renderer.game.canvas.height : domElements.canvas.height;
+
         // Reset the game
         const result = gameState.resetGame(
             difficultyValue,
             customCapacity,
             customLocations,
-            domElements.canvas.width,
-            domElements.canvas.height
+            width,
+            height
         );
 
         // Update DOM elements
@@ -87,7 +91,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Draw the initial game
         renderer.drawGame();
-    }, 100); // Small delay to ensure the canvas is fully sized
+    };
+
+    // Wait for Phaser to be ready (scene created)
+    const waitForPhaser = () => {
+        if (renderer.scene) {
+            initializeGame();
+        } else {
+            // Phaser not ready yet, wait a bit more
+            setTimeout(waitForPhaser, 50);
+        }
+    };
+
+    // Start waiting for Phaser
+    setTimeout(waitForPhaser, 100);
 
     console.log('CVRP Game initialized!');
 });
