@@ -19,6 +19,17 @@ class Renderer {
         this.touchRadius = Math.max(gameState.locationSize * 2, 30);
         this.isMobile = this.detectMobile();
 
+        // Load background image
+        this.backgroundImage = new Image();
+        this.backgroundImage.src = 'assets/images/background.jpg';
+        this.backgroundLoaded = false;
+        this.backgroundImage.onload = () => {
+            this.backgroundLoaded = true;
+            if (this.gameState.gameStarted) {
+                this.drawGame();
+            }
+        };
+
         // For touch devices, handle both touch and click events
         if (this.isMobile) {
             this.setupTouchHandling();
@@ -78,6 +89,9 @@ class Renderer {
     drawGame() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
+        // Draw background image first
+        this.drawBackground();
+
         // CHANGED ORDER: First draw all routes, then draw all locations on top
 
         // Draw all completed routes
@@ -88,6 +102,38 @@ class Renderer {
 
         // Draw all locations (depot and customers) on top of the routes
         this.drawLocations();
+    }
+
+    /**
+     * Draw the background image with cover behavior (no distortion)
+     */
+    drawBackground() {
+        if (!this.backgroundLoaded) return;
+
+        const canvas = this.canvas;
+        const img = this.backgroundImage;
+
+        // Calculate dimensions to cover the canvas while maintaining aspect ratio
+        const canvasRatio = canvas.width / canvas.height;
+        const imgRatio = img.width / img.height;
+
+        let drawWidth, drawHeight, offsetX, offsetY;
+
+        if (canvasRatio > imgRatio) {
+            // Canvas is wider than image ratio - fit to width
+            drawWidth = canvas.width;
+            drawHeight = canvas.width / imgRatio;
+            offsetX = 0;
+            offsetY = (canvas.height - drawHeight) / 2;
+        } else {
+            // Canvas is taller than image ratio - fit to height
+            drawHeight = canvas.height;
+            drawWidth = canvas.height * imgRatio;
+            offsetX = (canvas.width - drawWidth) / 2;
+            offsetY = 0;
+        }
+
+        this.ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
     }
 
     /**
@@ -187,9 +233,6 @@ class Renderer {
     drawDepot() {
         const depot = this.gameState.depot;
 
-        // Depot is drawn as a purple square
-        this.ctx.fillStyle = '#7209b7'; // Purple for depot
-
         // Add glow if this is the last point in current route
         if (this.gameState.currentRoute.length > 1 &&
             this.gameState.currentRoute[this.gameState.currentRoute.length - 1] === 0) {
@@ -199,25 +242,15 @@ class Renderer {
             this.ctx.shadowBlur = 0;
         }
 
-        // Slightly larger than customer locations
-        const depotSize = this.gameState.locationSize * 1.2;
-
-        // Draw rotated square (diamond shape)
-        this.ctx.save();
-        this.ctx.translate(depot.x, depot.y);
-        this.ctx.rotate(Math.PI / 4); // 45 degrees
-        this.ctx.fillRect(-depotSize / 2, -depotSize / 2, depotSize, depotSize);
-        this.ctx.restore();
+        // Draw house emoji for depot
+        const depotSize = this.gameState.locationSize * 2.4;
+        this.ctx.font = `${depotSize}px Arial`;
+        this.ctx.textAlign = 'center';
+        this.ctx.textBaseline = 'middle';
+        this.ctx.fillText('🏠', depot.x, depot.y);
 
         // Reset shadow
         this.ctx.shadowBlur = 0;
-
-        // Add "D" label
-        this.ctx.fillStyle = 'white';
-        this.ctx.font = `bold ${this.isMobile ? 14 : 12}px Arial`;
-        this.ctx.textAlign = 'center';
-        this.ctx.textBaseline = 'middle';
-        this.ctx.fillText('D', depot.x, depot.y);
     }
 
     /**
@@ -240,15 +273,6 @@ class Renderer {
             }
         }
 
-        // Set color based on status
-        if (inCurrentRoute) {
-            this.ctx.fillStyle = '#27ae60'; // Green for current route
-        } else if (isServed) {
-            this.ctx.fillStyle = '#3498db'; // Blue for served
-        } else {
-            this.ctx.fillStyle = '#e74c3c'; // Red for unserved
-        }
-
         // Add glow if this is the last customer in current route
         if (this.gameState.currentRoute.length > 0 &&
             this.gameState.currentRoute[this.gameState.currentRoute.length - 1] === customer.id) {
@@ -258,21 +282,30 @@ class Renderer {
             this.ctx.shadowBlur = 0;
         }
 
-        // Draw customer circle
+        // Draw apple emoji for customer
         const size = this.gameState.locationSize;
-        this.ctx.beginPath();
-        this.ctx.arc(customer.x, customer.y, size, 0, Math.PI * 2);
-        this.ctx.fill();
+        const emojiSize = size * 2.4;
+        this.ctx.font = `${emojiSize}px Arial`;
+        this.ctx.textAlign = 'center';
+        this.ctx.textBaseline = 'middle';
+        this.ctx.fillText('🍎', customer.x, customer.y);
 
         // Reset shadow
         this.ctx.shadowBlur = 0;
 
-        // Draw customer demand as number inside circle
-        this.ctx.fillStyle = 'white';
+        // Draw customer demand as number on top of apple
+        // Set color based on status for the number
+        if (inCurrentRoute) {
+            this.ctx.fillStyle = '#27ae60'; // Green for current route
+        } else if (isServed) {
+            this.ctx.fillStyle = '#3498db'; // Blue for served
+        } else {
+            this.ctx.fillStyle = '#ffffff'; // White for unserved
+        }
         const fontSize = this.isMobile ?
-            Math.max(10, Math.min(size - 2, 16)) :
-            Math.max(10, Math.min(size - 1, 14));
-        this.ctx.font = `${fontSize}px Arial`;
+            Math.max(10, Math.min(size + 5, 20)) :
+            Math.max(10, Math.min(size + 5, 20));
+        this.ctx.font = `bold ${fontSize}px Arial`;
         this.ctx.textAlign = 'center';
         this.ctx.textBaseline = 'middle';
         this.ctx.fillText(customer.demand.toString(), customer.x, customer.y);
@@ -286,6 +319,8 @@ class Renderer {
     drawAlgorithmSolution(routes, clearCanvas = true) {
         if (clearCanvas) {
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            // Draw background image
+            this.drawBackground();
         }
 
         // CHANGED ORDER: First draw routes, then locations on top
